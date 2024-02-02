@@ -14,13 +14,13 @@ public class Player
     public float speed = 5f;
 
     // Dash Cooldown
-    public float dashCooldown = 10f;
+    public float dashCooldown = 1f;
 
     //Dash Length
     public float dashTime = 10f;
 
     // Dash Speed Muiltiplier
-    public float DashPower = 10f;
+    public float DashPower = 30f;
 
     // Jump Height
     public float jumpPower = 16f;

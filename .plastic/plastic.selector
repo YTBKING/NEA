@@ -1,4 +1,0 @@
-repository "NEA@KINGPROJECTS@cloud"
-  path "/"
-    br "/main"
-    co "/main"

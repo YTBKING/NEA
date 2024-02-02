@@ -22,6 +22,7 @@ public class Movement : MonoBehaviour
     private float dashTime;
     private int dashCount = 0;
     public float dashHeightChange = 0.3f;
+    private float recent;
 
 
     public Image DashCooldown;
@@ -61,11 +62,19 @@ public class Movement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            if ((Input.GetKey(KeyCode.LeftShift) && !isDashed) || isDashing)
+            {
+                Dash(true);
+            }
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            if ((Input.GetKey(KeyCode.LeftShift) && !isDashed) || isDashing)
+            {
+                Dash(true);
+            }
         }
 
         if (isDashed)
@@ -84,7 +93,9 @@ public class Movement : MonoBehaviour
     {
         if (!MoveLock)
         {
+            recent = horizontal;
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+
 
             if ((Input.GetKey(KeyCode.LeftShift) && !isDashed) || isDashing)
             {
@@ -93,13 +104,30 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void Dash()
+    private void Dash(bool jump = false)
     {
         dashCount++;
         Debug.Log("Dash");
         isDashing = true;
         gameObject.transform.localScale = new Vector3(standardX, standardY - dashHeightChange, standardZ);
-        rb.velocity = new Vector2(horizontal * speed * DashPower, rb.velocity.y);
+        if (jump) {
+            if (horizontal == -1) {
+                rb.velocity = new Vector2(horizontal * speed - DashPower, jumpPower + DashPower);
+            }
+            else if (horizontal == 1) {
+                rb.velocity = new Vector2(horizontal * speed + DashPower, jumpPower + DashPower);
+            }
+        }
+        else {
+
+            if (horizontal == -1) {
+                rb.velocity = new Vector2(horizontal * speed - DashPower, rb.velocity.y);
+            }
+            else if (horizontal == 1) {
+                rb.velocity = new Vector2(horizontal * speed + DashPower, rb.velocity.y);
+            }
+        }
+
         if (dashCount == dashTime)
         {
             gameObject.transform.localScale = new Vector3(standardX, standardY, standardZ);
